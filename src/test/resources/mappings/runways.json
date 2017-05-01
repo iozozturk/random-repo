@@ -1,0 +1,10 @@
+{
+  "properties": {
+    "id": {
+      "type": "keyword"
+    },
+    "airport_ref": {
+      "type": "keyword"
+    }
+  }
+}

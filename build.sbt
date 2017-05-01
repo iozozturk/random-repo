@@ -18,6 +18,11 @@ val project = Project(
     "de.heikoseeberger" %% "akka-http-play-json" % "1.15.0",
     "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.0",
     "com.github.tototoshi" %% "scala-csv" % "1.3.4",
+    "org.elasticsearch" % "elasticsearch" % "5.3.2",
+    "org.elasticsearch.client" % "transport" % "5.3.2",
+    "org.slf4j" % "slf4j-simple" % "1.7.21",
+    "org.apache.logging.log4j" % "log4j-api" % "2.6.2",
+    "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.6.2",
     "org.scalatest" %% "scalatest" % "3.0.0" % Test,
     "com.typesafe.akka" %% "akka-http-testkit" % "10.0.0" % Test,
     "org.mockito" % "mockito-all" % "1.8.4" % Test
