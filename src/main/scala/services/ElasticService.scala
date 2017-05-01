@@ -15,7 +15,7 @@ import org.elasticsearch.transport.client.PreBuiltTransportClient
 import scala.io.Source
 
 @Singleton
-class ESService extends AirportSystem {
+class ElasticService extends AirportSystem {
   override val logger: LoggingAdapter = Logging(system, getClass)
 
   private val config: Config = ConfigFactory.load()

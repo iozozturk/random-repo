@@ -7,7 +7,7 @@ import org.scalatest.{Matchers, WordSpec}
 
 class ESServiceTest extends WordSpec with Matchers {
 
-  val esService = new ESService
+  val esService = new ElasticService
   val indexName = esService.indexName
 
   "ESService" should {
