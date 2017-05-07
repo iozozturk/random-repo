@@ -1,21 +1,20 @@
 package services
 
-import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest
+import akka.event.{Logging, LoggingAdapter}
+import common.IndexSystem
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
 
-class ESServiceTest extends WordSpec with Matchers {
+class ElasticServiceTest extends WordSpec with Matchers with BeforeAndAfterEach with IndexSystem {
+
+  override def afterEach(): Unit = deleteIndex
 
   val esService = new ElasticService
-  val indexName = esService.indexName
 
   "ESService" should {
 
     "checkAndCreateIndex" in {
-      if (checkIndexExists)
-        esService.client.admin().indices().delete(new DeleteIndexRequest(indexName)).get()
-
       esService.checkAndCreateIndex()
       esService.client.admin().indices().exists(new IndicesExistsRequest(indexName)).get().isExists shouldEqual true
 
@@ -27,10 +26,5 @@ class ESServiceTest extends WordSpec with Matchers {
 
   }
 
-  def checkIndexExists = esService.client
-    .admin()
-    .indices()
-    .exists(new IndicesExistsRequest(indexName))
-    .get()
-    .isExists
+  override val logger: LoggingAdapter = Logging(system, getClass)
 }
