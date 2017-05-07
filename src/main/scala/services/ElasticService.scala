@@ -1,16 +1,11 @@
 package services
 
-import java.net.InetAddress
-
 import akka.event.{Logging, LoggingAdapter}
 import com.google.inject.Singleton
 import com.typesafe.config.{Config, ConfigFactory}
 import common.AirportSystem
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest
-import org.elasticsearch.common.settings.Settings
-import org.elasticsearch.common.transport.InetSocketTransportAddress
 import org.elasticsearch.common.xcontent.XContentType
-import org.elasticsearch.transport.client.PreBuiltTransportClient
 
 import scala.io.Source
 
@@ -19,12 +14,6 @@ class ElasticService extends AirportSystem {
   override val logger: LoggingAdapter = Logging(system, getClass)
 
   private val config: Config = ConfigFactory.load()
-
-  private val host: String = config.getString("es.host")
-  val indexName: String = config.getString("es.index.name")
-
-  val client = new PreBuiltTransportClient(Settings.EMPTY)
-    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), 9300))
 
   def checkAndCreateIndex(): Unit = {
     if (indexExists)
