@@ -1,10 +1,16 @@
 {
-  "properties": {
-    "id": {
-      "type": "keyword"
-    },
-    "airport_ref": {
-      "type": "keyword"
+  "runways": {
+    "dynamic":"strict",
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "name": {
+        "type": "keyword"
+      },
+      "airport_ref": {
+        "type": "keyword"
+      }
     }
   }
 }

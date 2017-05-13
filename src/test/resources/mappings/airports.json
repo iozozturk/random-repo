@@ -1,10 +1,16 @@
 {
-  "properties": {
-    "id": {
-      "type": "keyword"
-    },
-    "ident": {
-      "type": "keyword"
+  "airports": {
+    "dynamic":"strict",
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "name": {
+        "type": "keyword"
+      },
+      "ident": {
+        "type": "keyword"
+      }
     }
   }
 }

@@ -1,22 +1,25 @@
 {
-  "properties": {
-    "id": {
-      "type": "keyword"
-    },
-    "code": {
-      "type": "keyword"
-    },
-    "name": {
-      "type": "keyword"
-    },
-    "continent": {
-      "type": "keyword"
-    },
-    "wikipedia_link": {
-      "type": "keyword"
-    },
-    "keywords": {
-      "type": "keyword"
+  "countries": {
+    "dynamic":"strict",
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "code": {
+        "type": "keyword"
+      },
+      "name": {
+        "type": "keyword"
+      },
+      "continent": {
+        "type": "keyword"
+      },
+      "wikipedia_link": {
+        "type": "keyword"
+      },
+      "keywords": {
+        "type": "keyword"
+      }
     }
   }
 }

@@ -1,64 +1,67 @@
 {
-  "properties": {
-    "id": {
-      "type": "keyword"
-    },
-    "airport_ref": {
-      "type": "keyword"
-    },
-    "airport_ident": {
-      "type": "keyword"
-    },
-    "length_ft": {
-      "type": "keyword"
-    },
-    "width_ft": {
-      "type": "keyword"
-    },
-    "surface": {
-      "type": "keyword"
-    },
-    "lighted": {
-      "type": "keyword"
-    },
-    "closed": {
-      "type": "keyword"
-    },
-    "le_ident": {
-      "type": "keyword"
-    },
-    "le_latitude_deg": {
-      "type": "keyword"
-    },
-    "le_longitude_deg": {
-      "type": "keyword"
-    },
-    "le_elevation_ft": {
-      "type": "keyword"
-    },
-    "le_heading_degT": {
-      "type": "keyword"
-    },
-    "le_displaced_threshold_ft": {
-      "type": "keyword"
-    },
-    "he_ident": {
-      "type": "keyword"
-    },
-    "he_latitude_deg": {
-      "type": "keyword"
-    },
-    "he_longitude_deg": {
-      "type": "keyword"
-    },
-    "he_elevation_ft": {
-      "type": "keyword"
-    },
-    "he_heading_degT": {
-      "type": "keyword"
-    },
-    "he_displaced_threshold_ft": {
-      "type": "keyword"
+  "runways": {
+    "dynamic":"strict",
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "airport_ref": {
+        "type": "keyword"
+      },
+      "airport_ident": {
+        "type": "keyword"
+      },
+      "length_ft": {
+        "type": "keyword"
+      },
+      "width_ft": {
+        "type": "keyword"
+      },
+      "surface": {
+        "type": "keyword"
+      },
+      "lighted": {
+        "type": "keyword"
+      },
+      "closed": {
+        "type": "keyword"
+      },
+      "le_ident": {
+        "type": "keyword"
+      },
+      "le_latitude_deg": {
+        "type": "keyword"
+      },
+      "le_longitude_deg": {
+        "type": "keyword"
+      },
+      "le_elevation_ft": {
+        "type": "keyword"
+      },
+      "le_heading_degT": {
+        "type": "keyword"
+      },
+      "le_displaced_threshold_ft": {
+        "type": "keyword"
+      },
+      "he_ident": {
+        "type": "keyword"
+      },
+      "he_latitude_deg": {
+        "type": "keyword"
+      },
+      "he_longitude_deg": {
+        "type": "keyword"
+      },
+      "he_elevation_ft": {
+        "type": "keyword"
+      },
+      "he_heading_degT": {
+        "type": "keyword"
+      },
+      "he_displaced_threshold_ft": {
+        "type": "keyword"
+      }
     }
   }
 }

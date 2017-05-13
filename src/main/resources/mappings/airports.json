@@ -1,58 +1,61 @@
 {
-  "properties": {
-    "id": {
-      "type": "keyword"
-    },
-    "ident": {
-      "type": "keyword"
-    },
-    "type": {
-      "type": "keyword"
-    },
-    "name": {
-      "type": "keyword"
-    },
-    "latitude_deg": {
-      "type": "keyword"
-    },
-    "longitude_deg": {
-      "type": "keyword"
-    },
-    "elevation_ft": {
-      "type": "keyword"
-    },
-    "continent": {
-      "type": "keyword"
-    },
-    "iso_country": {
-      "type": "keyword"
-    },
-    "iso_region": {
-      "type": "keyword"
-    },
-    "municipality": {
-      "type": "keyword"
-    },
-    "scheduled_service": {
-      "type": "keyword"
-    },
-    "gps_code": {
-      "type": "keyword"
-    },
-    "iata_code": {
-      "type": "keyword"
-    },
-    "local_code": {
-      "type": "keyword"
-    },
-    "home_link": {
-      "type": "keyword"
-    },
-    "wikipedia_link": {
-      "type": "keyword"
-    },
-    "keywords": {
-      "type": "keyword"
+  "airports": {
+    "dynamic":"strict",
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "ident": {
+        "type": "keyword"
+      },
+      "type": {
+        "type": "keyword"
+      },
+      "name": {
+        "type": "keyword"
+      },
+      "latitude_deg": {
+        "type": "keyword"
+      },
+      "longitude_deg": {
+        "type": "keyword"
+      },
+      "elevation_ft": {
+        "type": "keyword"
+      },
+      "continent": {
+        "type": "keyword"
+      },
+      "iso_country": {
+        "type": "keyword"
+      },
+      "iso_region": {
+        "type": "keyword"
+      },
+      "municipality": {
+        "type": "keyword"
+      },
+      "scheduled_service": {
+        "type": "keyword"
+      },
+      "gps_code": {
+        "type": "keyword"
+      },
+      "iata_code": {
+        "type": "keyword"
+      },
+      "local_code": {
+        "type": "keyword"
+      },
+      "home_link": {
+        "type": "keyword"
+      },
+      "wikipedia_link": {
+        "type": "keyword"
+      },
+      "keywords": {
+        "type": "keyword"
+      }
     }
   }
 }

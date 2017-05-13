@@ -1,10 +1,16 @@
 {
-  "properties": {
-    "id": {
-      "type": "keyword"
-    },
-    "code": {
-      "type": "keyword"
+  "countries": {
+    "dynamic":"strict",
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "name": {
+        "type": "keyword"
+      },
+      "code": {
+        "type": "keyword"
+      }
     }
   }
 }
