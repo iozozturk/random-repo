@@ -5,6 +5,7 @@ import com.google.inject.Singleton
 import com.typesafe.config.{Config, ConfigFactory}
 import common.AirportSystem
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest
+import org.elasticsearch.common.settings.Settings
 import org.elasticsearch.common.xcontent.XContentType
 
 import scala.io.Source
@@ -36,7 +37,7 @@ class ElasticService extends AirportSystem {
     val countryMapping = Source.fromResource("mappings/countries.json").getLines().map(_.trim).mkString
 
     client.admin().indices()
-      .prepareCreate(indexName)
+      .prepareCreate(indexName).setSettings(Settings.builder().put("index.mapper.dynamic", false))
       .addMapping("airports", airportMapping.toString, XContentType.JSON)
       .addMapping("runways", runwayMapping.toString, XContentType.JSON)
       .addMapping("countries", countryMapping.toString, XContentType.JSON)
