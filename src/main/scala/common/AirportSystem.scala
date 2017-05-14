@@ -21,11 +21,10 @@ trait AirportSystem {
   private val host: String = config.getString("es.host")
   val indexName: String = config.getString("es.index.name")
 
+  val maxResultValue = 10000
   val client = new PreBuiltTransportClient(Settings.EMPTY)
     .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), 9300))
 
-  private val maxResultValue = 10000
-  val searchClient = client.prepareSearch(indexName).setSize(maxResultValue)
 
   val logger: LoggingAdapter
 

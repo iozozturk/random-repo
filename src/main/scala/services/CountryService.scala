@@ -5,19 +5,35 @@ import com.google.inject.Singleton
 import common.AirportSystem
 import org.elasticsearch.common.unit.Fuzziness
 import org.elasticsearch.index.query.QueryBuilders
+import org.elasticsearch.search.aggregations.AggregationBuilders
+import org.elasticsearch.search.aggregations.bucket.terms.Terms
 import play.api.libs.json.{JsObject, Json}
+
+import scala.collection.JavaConversions.asScalaBuffer
 
 @Singleton
 class CountryService extends AirportSystem {
 
+  def getHavingMaxAirports(numberOfCountries: Int): Map[String, Long] = {
+    val countryAggregation = AggregationBuilders.terms("airport_country").field("iso_country").size(numberOfCountries)
+    val searchResponse = client.prepareSearch(indexName).setSize(0).addAggregation(countryAggregation).get()
+    val buckets = searchResponse.getAggregations.get[Terms]("airport_country").getBuckets.toSeq
+
+    buckets.map { bucket =>
+      val countryCode = bucket.getKeyAsString
+      val numberOfAirports = bucket.getDocCount
+      (countryCode,numberOfAirports)
+    }.toMap
+  }
+
 
   def checkCountry(countryQuery: String): Option[Country] = {
-    val esQuery = searchClient.setTypes("countries")
+    val esQuery = client.prepareSearch(indexName).setSize(maxResultValue).setTypes("countries")
 
     val searchResponse = if (countryQuery.length == 2)
-     esQuery.setQuery(QueryBuilders.matchQuery("code", countryQuery)).get()
+      esQuery.setQuery(QueryBuilders.matchQuery("code", countryQuery)).get()
     else
-     esQuery.setQuery(QueryBuilders.matchQuery("name", countryQuery).fuzziness(Fuzziness.AUTO)).get()
+      esQuery.setQuery(QueryBuilders.matchQuery("name", countryQuery).fuzziness(Fuzziness.AUTO)).get()
 
     if (searchResponse.getHits.hits().length > 0) {
       val country = Country(Json.parse(searchResponse.getHits.getAt(0).getSourceAsString).as[JsObject]) //  todo improve for multi match countries
@@ -31,4 +47,9 @@ class CountryService extends AirportSystem {
 case class Country(json: JsObject) {
   val countryCode = (json \ "code").as[String]
   val name = (json \ "name").as[String]
+
+  def withAirports(airports: Seq[Airport]) = airports.isEmpty match {
+    case false => Country(json ++ Json.obj("airports" -> airports.map(_.json)))
+    case true => Country(json)
+  }
 }

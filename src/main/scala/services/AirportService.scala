@@ -20,13 +20,13 @@ class AirportService extends AirportSystem {
   }
 
   def getAirportsWithRunways(country: Country): Option[Seq[Airport]] = {
-    val searchResponse = searchClient.setTypes("airports")
+    val searchResponse = client.prepareSearch(indexName).setSize(maxResultValue).setTypes("airports")
       .setQuery(QueryBuilders.termQuery("iso_country", country.countryCode)).get()
 
     if (searchResponse.getHits.totalHits() > 0) {
       val airports = searchResponse.getHits.getHits.map { searchHit =>
         val airport = Airport(Json.parse(searchHit.getSourceAsString).as[JsObject])
-        val response = searchClient.setTypes("runways").setQuery(QueryBuilders.termQuery("airport_ident", airport.ident)).get()
+        val response = client.prepareSearch(indexName).setSize(maxResultValue).setTypes("runways").setQuery(QueryBuilders.termQuery("airport_ident", airport.ident)).get()
         val runways = response.getHits.getHits.map(rw => Runway(Json.parse(rw.getSourceAsString).as[JsObject])).toSeq
         airport.withRunways(runways)
       }
@@ -37,10 +37,6 @@ class AirportService extends AirportSystem {
   }
 
   override val logger: LoggingAdapter = Logging(system, getClass)
-}
-
-case class Runway(json: JsObject) {
-  val airportIdent = (json \ "airport_ident").as[String]
 }
 
 case class Airport(json: JsObject) {
