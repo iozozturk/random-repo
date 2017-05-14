@@ -58,11 +58,11 @@ class CountryServiceTest extends WordSpec with Matchers with MockitoSugar with I
     }
 
     "list top n countries having max number of airports" in {
-      countryService.getHavingMaxAirports(2) shouldEqual Map("TR" -> 1, "US" -> 1)
+      countryService.getHavingMaxAirports(1) shouldEqual Map("TR" -> 2)
     }
 
     "list top n countries having min number of airports" in {
-
+      countryService.getHavingMinAirports(1) shouldEqual Map("US" -> 1)
     }
 
   }

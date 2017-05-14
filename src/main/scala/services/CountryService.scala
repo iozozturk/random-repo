@@ -7,6 +7,7 @@ import org.elasticsearch.common.unit.Fuzziness
 import org.elasticsearch.index.query.QueryBuilders
 import org.elasticsearch.search.aggregations.AggregationBuilders
 import org.elasticsearch.search.aggregations.bucket.terms.Terms
+import org.elasticsearch.search.aggregations.bucket.terms.Terms.Order
 import play.api.libs.json.{JsObject, Json}
 
 import scala.collection.JavaConversions.asScalaBuffer
@@ -16,6 +17,18 @@ class CountryService extends AirportSystem {
 
   def getHavingMaxAirports(numberOfCountries: Int): Map[String, Long] = {
     val countryAggregation = AggregationBuilders.terms("airport_country").field("iso_country").size(numberOfCountries)
+    val searchResponse = client.prepareSearch(indexName).setSize(0).addAggregation(countryAggregation).get()
+    val buckets = searchResponse.getAggregations.get[Terms]("airport_country").getBuckets.toSeq
+
+    buckets.map { bucket =>
+      val countryCode = bucket.getKeyAsString
+      val numberOfAirports = bucket.getDocCount
+      (countryCode,numberOfAirports)
+    }.toMap
+  }
+
+  def getHavingMinAirports(numberOfCountries: Int): Map[String, Long] = {
+    val countryAggregation = AggregationBuilders.terms("airport_country").field("iso_country").size(numberOfCountries).order(Terms.Order.term(false))
     val searchResponse = client.prepareSearch(indexName).setSize(0).addAggregation(countryAggregation).get()
     val buckets = searchResponse.getAggregations.get[Terms]("airport_country").getBuckets.toSeq
 
