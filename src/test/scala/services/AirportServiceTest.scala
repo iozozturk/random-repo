@@ -1,10 +1,52 @@
 package services
 
-import org.scalatest.{Matchers, WordSpec}
+import akka.event.{Logging, LoggingAdapter}
+import common.IndexSystem
+import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
+import play.api.libs.json.{JsObject, Json}
 
-class AirportServiceTest extends WordSpec  with Matchers{
+class AirportServiceTest extends WordSpec with Matchers with IndexSystem with BeforeAndAfterEach {
 
-  val airportService  = new AirportService
+  override def afterEach(): Unit = deleteIndex
+  override def beforeEach(): Unit = checkAndCreateIndex
+
+  val airportService = new AirportService
+
+
+  val countryTurkey =
+    Country(Json.parse(
+      """
+        |{
+        |   "id":"1",
+        |   "code":"TR",
+        |   "name":"Turkey",
+        |   "continent":"EU"
+        |}
+      """.stripMargin
+    ).as[JsObject])
+
+  val airportTurkey =
+    Airport(Json.parse(
+      """
+        |{
+        |   "id":"4528",
+        |   "ident":"LTBA",
+        |   "name":"Atatürk International Airport",
+        |   "iso_country":"TR"
+        |}
+      """.stripMargin
+    ).as[JsObject])
+
+  val runway =
+    Runway(Json.parse(
+      """
+        |{
+        |   "id":"239260",
+        |   "airport_ref":"4528",
+        |   "airport_ident":"LTBA"
+        |}
+      """.stripMargin
+    ).as[JsObject])
 
   "AirportServiceTest" should {
 
@@ -31,5 +73,16 @@ class AirportServiceTest extends WordSpec  with Matchers{
       (airportsToJson.head \ "width_ft").as[String] shouldEqual "-5.1"
     }
 
+    "find airports and runways belonging to a country" in {
+      indexService.indexAllData
+
+      val airportsWithRunways = airportService.getAirportsWithRunways(countryTurkey)
+
+      airportsWithRunways.get.head.ident shouldEqual airportTurkey.ident
+      airportsWithRunways.get.head.runways.head.airportIdent shouldEqual runway.airportIdent
+    }
+
   }
+
+  override val logger: LoggingAdapter = Logging(system, getClass)
 }

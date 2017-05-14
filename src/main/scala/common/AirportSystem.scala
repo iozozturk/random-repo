@@ -24,6 +24,9 @@ trait AirportSystem {
   val client = new PreBuiltTransportClient(Settings.EMPTY)
     .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), 9300))
 
+  private val maxResultValue = 10000
+  val searchClient = client.prepareSearch(indexName).setSize(maxResultValue)
+
   val logger: LoggingAdapter
 
 }

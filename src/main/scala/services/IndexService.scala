@@ -13,6 +13,7 @@ class IndexService @Inject()(airportService: AirportService) extends AirportSyst
   val dataTypes = Array("airports", "runways", "countries")
 
   def indexAllData = {
+    logger.info("Indexing all data, please be patient..")
     dataTypes.foreach { dataType =>
       airportService.parseRecordsToJson(dataType).grouped(10).foreach(batch => indexBatch(batch, dataType))
     }

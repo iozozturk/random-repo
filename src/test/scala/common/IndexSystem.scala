@@ -2,7 +2,7 @@ package common
 
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest
-import services.ElasticService
+import services.{AirportService, ElasticService, IndexService}
 
 trait IndexSystem extends AirportSystem {
 
@@ -17,4 +17,6 @@ trait IndexSystem extends AirportSystem {
     .isExists
 
   def checkAndCreateIndex = new ElasticService().checkAndCreateIndex()
+
+  val indexService = new IndexService(new AirportService)
 }
