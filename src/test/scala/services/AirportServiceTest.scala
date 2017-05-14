@@ -48,7 +48,7 @@ class AirportServiceTest extends WordSpec with Matchers with IndexSystem with Be
       """.stripMargin
     ).as[JsObject])
 
-  "AirportServiceTest" should {
+  "AirportService" should {
 
     "parse airport data toJson" in {
       val airportsToJson = airportService.parseRecordsToJson("airports")

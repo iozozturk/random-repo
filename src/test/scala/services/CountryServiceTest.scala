@@ -43,7 +43,7 @@ class CountryServiceTest extends WordSpec with Matchers with MockitoSugar with I
     ).as[JsObject])
 
 
-  "CountryServiceTest" should {
+  "CountryService" should {
 
     "checkCountry with country code if exists" in {
       countryService.checkCountry("TR") shouldEqual Some(countryTurkey)
