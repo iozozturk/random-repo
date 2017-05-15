@@ -41,7 +41,7 @@ class CountryService extends AirportSystem {
 
 
   def checkCountry(countryQuery: String): Option[Country] = {
-    val esQuery = client.prepareSearch(indexName).setSize(maxResultValue).setTypes("countries")
+    val esQuery = client.prepareSearch(indexName).setSize(maxResultSize).setTypes("countries")
 
     val searchResponse = if (countryQuery.length == 2)
       esQuery.setQuery(QueryBuilders.matchQuery("code", countryQuery)).get()

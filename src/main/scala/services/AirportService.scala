@@ -20,13 +20,13 @@ class AirportService extends AirportSystem {
   }
 
   def getAirportsWithRunways(country: Country): Option[Seq[Airport]] = {
-    val searchResponse = client.prepareSearch(indexName).setSize(maxResultValue).setTypes("airports")
+    val searchResponse = client.prepareSearch(indexName).setSize(maxResultSize).setTypes("airports")
       .setQuery(QueryBuilders.termQuery("iso_country", country.countryCode)).get()
 
     if (searchResponse.getHits.totalHits() > 0) {
       val airports = searchResponse.getHits.getHits.map { searchHit =>
         val airport = Airport(Json.parse(searchHit.getSourceAsString).as[JsObject])
-        val response = client.prepareSearch(indexName).setSize(maxResultValue).setTypes("runways").setQuery(QueryBuilders.termQuery("airport_ident", airport.ident)).get()
+        val response = client.prepareSearch(indexName).setSize(maxResultSize).setTypes("runways").setQuery(QueryBuilders.termQuery("airport_ident", airport.ident)).get()
         val runways = response.getHits.getHits.map(rw => Runway(Json.parse(rw.getSourceAsString).as[JsObject])).toSeq
         airport.withRunways(runways)
       }
