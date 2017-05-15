@@ -18,7 +18,7 @@ trait AirportSystem {
   implicit val executor: ExecutionContextExecutor = system.dispatcher
   implicit val materializer: ActorMaterializer = ActorMaterializer()
 
-  val maxResultSize = 10000
+  val maxResultSize = 50000
   val client: TransportClient = Constants.client
   val indexName: String = Constants.indexName
 
