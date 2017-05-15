@@ -46,10 +46,22 @@ class AirportHttpService @Inject()(airportService: AirportService,
                 case _ => complete(NotFound)
               }
             case _ =>
-              logger.debug(s"No country information found for:${query}")
+              logger.debug(s"No country information found for:$query")
               complete(NotFound)
           }
         }
       }
-    }
+    } ~
+      path("reports") {
+        get {
+          logger.info(s"Getting airport report")
+          val countriesWithMaxAirports = countryService.getHavingMaxAirports(10)
+          val countriesWithMinAirports = countryService.getHavingMinAirports(10)
+          complete(OK, Json.obj(
+            "countriesWithMaxAirports" -> countriesWithMaxAirports,
+            "countriesWithMinAirports" -> countriesWithMinAirports
+          ).toString())
+        }
+      }
+
 }

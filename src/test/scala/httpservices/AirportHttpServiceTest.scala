@@ -9,7 +9,7 @@ import play.api.libs.json.Json
 import services.{Airport, AirportService, Country, CountryService}
 
 class AirportHttpServiceTest extends AsyncWordSpec
-  with Matchers with ScalatestRouteTest with MockitoSugar with Protocols{
+  with Matchers with ScalatestRouteTest with MockitoSugar with Protocols {
 
   val airportService = mock[AirportService]
   val countryService = mock[CountryService]
@@ -19,7 +19,7 @@ class AirportHttpServiceTest extends AsyncWordSpec
   val airportWithRunway = Airport(Json.obj(
     "name" -> "aiport1",
     "ident" -> "LTBA",
-    "runways" -> Seq(Json.obj("name" -> "runway1", "airport_ident"->"LTBA"))
+    "runways" -> Seq(Json.obj("name" -> "runway1", "airport_ident" -> "LTBA"))
   ))
 
   "Airport Service" should {
@@ -54,6 +54,20 @@ class AirportHttpServiceTest extends AsyncWordSpec
 
       Get("/airports?q=" + query) ~> airportHttpService.route ~> check {
         status shouldEqual StatusCodes.NotFound
+      }
+    }
+
+    "create reports about countries with min/max number of airports" in {
+      val countriesWithMaxAirports = Map("TR" -> 1L)
+      val countriesWithMinAirports = Map("US" -> 1L)
+      when(countryService.getHavingMaxAirports(10)) thenReturn countriesWithMaxAirports
+      when(countryService.getHavingMinAirports(10)) thenReturn countriesWithMinAirports
+
+      Get("/reports") ~> airportHttpService.route ~> check {
+        status shouldEqual StatusCodes.OK
+        responseAs[String] shouldEqual Json.obj(
+          "countriesWithMaxAirports" -> countriesWithMaxAirports,
+          "countriesWithMinAirports" -> countriesWithMinAirports).toString()
       }
     }
 
