@@ -36,8 +36,12 @@ class ElasticService extends AirportSystem {
     val runwayMapping = Source.fromResource("mappings/runways.json").getLines().map(_.trim).mkString
     val countryMapping = Source.fromResource("mappings/countries.json").getLines().map(_.trim).mkString
 
+    val indexSettings = Settings.builder()
+      .put("index.mapper.dynamic", false)
+      .put("index.max_result_window", 50000)
+      .put("index.number_of_shards", 1)
     client.admin().indices()
-      .prepareCreate(indexName).setSettings(Settings.builder().put("index.mapper.dynamic", false))
+      .prepareCreate(indexName).setSettings(indexSettings)
       .addMapping("airports", airportMapping.toString, XContentType.JSON)
       .addMapping("runways", runwayMapping.toString, XContentType.JSON)
       .addMapping("countries", countryMapping.toString, XContentType.JSON)
