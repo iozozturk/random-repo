@@ -20,7 +20,7 @@ class IndexServiceTest extends WordSpec with Matchers with MockitoSugar with Ind
 
     "indexAllData" in {
       when(airportService.parseRecordsToJson("airports")) thenReturn List(Json.obj("id" -> "1", "ident" -> "LTBA", "name" -> "Halifax"))
-      when(airportService.parseRecordsToJson("runways")) thenReturn List(Json.obj("id" -> "1", "airport_ident" -> "LTBA", "name" -> "Longest"))
+      when(airportService.parseRecordsToJson("runways")) thenReturn List(Json.obj("id" -> "1", "airport_ident" -> "LTBA"))
       when(airportService.parseRecordsToJson("countries")) thenReturn List(Json.obj("id" -> "1", "name" -> "US"))
       indexService.indexAllData
       val searchHits = client.prepareSearch(indexName).setTypes("airports").setQuery(QueryBuilders.termQuery("name", "Halifax")).get().getHits.getHits
