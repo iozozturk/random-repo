@@ -12,7 +12,7 @@ import akka.util.Timeout
 import com.google.inject.{Inject, Singleton}
 import common.AirportSystem
 import play.api.libs.json.{JsObject, Json}
-import services.{AirportService, CountryService}
+import services.{AirportService, CountryService, RunwayService}
 import spray.json.DefaultJsonProtocol
 
 import scala.concurrent.duration.DurationInt
@@ -27,7 +27,8 @@ trait Protocols extends SprayJsonSupport with DefaultJsonProtocol {
 
 @Singleton
 class AirportHttpService @Inject()(airportService: AirportService,
-                                   countryService: CountryService) extends AirportSystem with Protocols {
+                                   countryService: CountryService,
+                                   runwayService: RunwayService) extends AirportSystem with Protocols {
   implicit val timeout = Timeout(10 seconds)
   override val logger: LoggingAdapter = Logging(system, getClass)
 
@@ -57,10 +58,13 @@ class AirportHttpService @Inject()(airportService: AirportService,
           logger.info(s"Getting airport report")
           val countriesWithMaxAirports = countryService.getHavingMaxAirports(10)
           val countriesWithMinAirports = countryService.getHavingMinAirports(10)
+          val mostCommonRunways = runwayService.getMostCommonIdents(10)
           complete(OK, Json.obj(
             "countriesWithMaxAirports" -> countriesWithMaxAirports,
-            "countriesWithMinAirports" -> countriesWithMinAirports
-          ).toString())
+            "countriesWithMinAirports" -> countriesWithMinAirports,
+            "mostCommonRunwayIdents" -> mostCommonRunways
+          ).toString()
+          )
         }
       }
 

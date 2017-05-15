@@ -6,14 +6,15 @@ import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{AsyncWordSpec, Matchers}
 import play.api.libs.json.Json
-import services.{Airport, AirportService, Country, CountryService}
+import services._
 
 class AirportHttpServiceTest extends AsyncWordSpec
   with Matchers with ScalatestRouteTest with MockitoSugar with Protocols {
 
   val airportService = mock[AirportService]
   val countryService = mock[CountryService]
-  val airportHttpService = new AirportHttpService(airportService, countryService)
+  val runwayService = mock[RunwayService]
+  val airportHttpService = new AirportHttpService(airportService, countryService, runwayService)
 
   val countryTR = Country(Json.obj("code" -> "tr", "name" -> "Turkey"))
   val airportWithRunway = Airport(Json.obj(
@@ -60,14 +61,17 @@ class AirportHttpServiceTest extends AsyncWordSpec
     "create reports about countries with min/max number of airports" in {
       val countriesWithMaxAirports = Map("TR" -> 1L)
       val countriesWithMinAirports = Map("US" -> 1L)
+      val mostCommonRunwayIdents = Map("NL" -> 1L)
       when(countryService.getHavingMaxAirports(10)) thenReturn countriesWithMaxAirports
       when(countryService.getHavingMinAirports(10)) thenReturn countriesWithMinAirports
+      when(runwayService.getMostCommonIdents(10)) thenReturn mostCommonRunwayIdents
 
       Get("/reports") ~> airportHttpService.route ~> check {
         status shouldEqual StatusCodes.OK
         responseAs[String] shouldEqual Json.obj(
           "countriesWithMaxAirports" -> countriesWithMaxAirports,
-          "countriesWithMinAirports" -> countriesWithMinAirports).toString()
+          "countriesWithMinAirports" -> countriesWithMinAirports,
+          "mostCommonRunwayIdents" -> mostCommonRunwayIdents).toString()
       }
     }
 
