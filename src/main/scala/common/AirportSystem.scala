@@ -28,8 +28,9 @@ trait AirportSystem {
 object Constants {
   private val config: Config = ConfigFactory.load()
   private val host: String = config.getString("es.host")
+  private val port: Int = config.getInt("es.port")
   val indexName: String = config.getString("es.index.name")
 
   val client = new PreBuiltTransportClient(Settings.EMPTY)
-    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), 9300))
+    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), port))
 }
