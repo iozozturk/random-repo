@@ -7,7 +7,6 @@ import org.elasticsearch.common.unit.Fuzziness
 import org.elasticsearch.index.query.QueryBuilders
 import org.elasticsearch.search.aggregations.AggregationBuilders
 import org.elasticsearch.search.aggregations.bucket.terms.Terms
-import org.elasticsearch.search.aggregations.bucket.terms.Terms.Order
 import play.api.libs.json.{JsObject, Json}
 
 import scala.collection.JavaConversions.asScalaBuffer
@@ -44,7 +43,7 @@ class CountryService extends AirportSystem {
     val esQuery = client.prepareSearch(indexName).setSize(maxResultSize).setTypes("countries")
 
     val searchResponse = if (countryQuery.length == 2)
-      esQuery.setQuery(QueryBuilders.matchQuery("code", countryQuery)).get()
+      esQuery.setQuery(QueryBuilders.matchQuery("code", countryQuery.toUpperCase)).get()
     else
       esQuery.setQuery(QueryBuilders.matchQuery("name", countryQuery).fuzziness(Fuzziness.AUTO)).get()
 
