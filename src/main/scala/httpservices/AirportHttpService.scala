@@ -2,9 +2,8 @@ package httpservices
 
 import akka.event.{Logging, LoggingAdapter}
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.StatusCodes.{NotFound, OK}
-import akka.http.scaladsl.model.headers.RawHeader
+import akka.http.scaladsl.model.{HttpEntity, HttpResponse, MediaTypes}
 import akka.http.scaladsl.server.Directives.{complete, path, _}
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.unmarshalling.Unmarshaller
@@ -31,6 +30,7 @@ class AirportHttpService @Inject()(airportService: AirportService,
                                    runwayService: RunwayService) extends AirportSystem with Protocols {
   implicit val timeout = Timeout(10 seconds)
   override val logger: LoggingAdapter = Logging(system, getClass)
+  val jsonContentType = MediaTypes.`application/json`.toContentType
 
   val route: Route =
     path("airports") {
@@ -41,9 +41,9 @@ class AirportHttpService @Inject()(airportService: AirportService,
             case Some(country) =>
               logger.debug(s"Checking airports for country:${country.name}")
               airportService.getAirportsWithRunways(country) match {
-                case Some(airports) => respondWithHeaders(RawHeader("Content-Type", "application/json")) {
-                  complete(OK, Json.obj("airports" -> airports.map(_.json)).toString())
-                }
+                case Some(airports) =>
+                  val airportData = Json.obj("airports" -> airports.map(_.json)).toString()
+                  complete(HttpResponse(OK, entity = HttpEntity(jsonContentType, airportData)))
                 case _ => complete(NotFound)
               }
             case _ =>
