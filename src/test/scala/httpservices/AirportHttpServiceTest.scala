@@ -62,16 +62,19 @@ class AirportHttpServiceTest extends AsyncWordSpec
       val countriesWithMaxAirports = Map("TR" -> 1L)
       val countriesWithMinAirports = Map("US" -> 1L)
       val mostCommonRunwayIdents = Map("NL" -> 1L)
+      val runwaysByCountry = Map("DE" -> List("ASP"))
       when(countryService.getHavingMaxAirports(10)) thenReturn countriesWithMaxAirports
       when(countryService.getHavingMinAirports(10)) thenReturn countriesWithMinAirports
       when(runwayService.getMostCommonIdents(10)) thenReturn mostCommonRunwayIdents
+      when(runwayService.getRunwaySurfacesByCountry) thenReturn runwaysByCountry
 
       Get("/reports") ~> airportHttpService.route ~> check {
         status shouldEqual StatusCodes.OK
         responseAs[String] shouldEqual Json.obj(
           "countriesWithMaxAirports" -> countriesWithMaxAirports,
           "countriesWithMinAirports" -> countriesWithMinAirports,
-          "mostCommonRunwayIdents" -> mostCommonRunwayIdents).toString()
+          "mostCommonRunwayIdents" -> mostCommonRunwayIdents,
+          "runwaysByCountry"-> runwaysByCountry).toString()
       }
     }
 

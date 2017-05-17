@@ -56,13 +56,15 @@ class AirportHttpService @Inject()(airportService: AirportService,
       path("reports") {
         get {
           logger.info(s"Getting airport report")
+          val countryRunways = runwayService.getRunwaySurfacesByCountry
           val countriesWithMaxAirports = countryService.getHavingMaxAirports(10)
           val countriesWithMinAirports = countryService.getHavingMinAirports(10)
           val mostCommonRunways = runwayService.getMostCommonIdents(10)
           complete(OK, Json.obj(
             "countriesWithMaxAirports" -> countriesWithMaxAirports,
             "countriesWithMinAirports" -> countriesWithMinAirports,
-            "mostCommonRunwayIdents" -> mostCommonRunways
+            "mostCommonRunwayIdents" -> mostCommonRunways,
+            "runwaysByCountry" -> countryRunways
           ).toString()
           )
         }
