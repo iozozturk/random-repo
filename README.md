@@ -73,6 +73,12 @@ $ curl http://localhost:9000/reports
     "01C": 1,
     "01R": 2,
     "01": 1144
+  },
+  "runwaysByCountry": {
+    "TR": [
+        "ASP",
+        "UNK"
+    ]
   }
 }
 ```
