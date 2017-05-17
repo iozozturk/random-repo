@@ -25,7 +25,7 @@ object Application extends AirportSystem {
 
     val binding = Await.result(Http().bindAndHandle(route, "0.0.0.0", 9000), 3.seconds)
 
-    println(s"Started server at ${binding.localAddress}")
+    logger.info(s"Started server at ${binding.localAddress}")
   }
 
   override val logger: LoggingAdapter = Logging(system, getClass)
